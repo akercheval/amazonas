@@ -1,4 +1,5 @@
 import os
+from random import randint
 
 ################################################################################
 ###                                                                          ###
@@ -8,18 +9,21 @@ import os
 
 class Jugador:
 
-    def __init__(self, celdas, num, nombre, simb):
+    def __init__(self, celdas, num, nombre, simb, bot):
         self.nombre = nombre
         self.celdas = celdas
         self.num = num
         self.simb = simb
+        self.bot = bot
 
     def valido(self, lista, inicio, fin):
         if inicio not in self.celdas:
-            print("No hay amazona en la celda de inicio!", end=" ")
+            if self.bot == False:
+                print("No hay amazona en la celda de inicio!", end=" ")
             return False
         if inicio == fin:
-            print("La celda inicial y la celda final son iguales!", end = " ")
+            if self.bot == False:
+                print("La celda inicial y la celda final son iguales!", end = " ")
             return False
         ix = ord(inicio[0]) - 97
         fx = ord(fin[0]) - 97
@@ -30,14 +34,16 @@ class Jugador:
             for i in range(iy + 1,fy + 1):
                 if lista[i][ix] == '*' or lista[i][ix] == 'X' \
                         or lista[i][ix] == 'O':
-                    print("Hay jugador o flecha bloqueando!", end = " ")
+                    if self.bot == False:
+                        print("Hay jugador o flecha bloqueando!", end = " ")
                     return False
             return True
         elif ix == fx and iy > fy:
             for i in range(fy,iy):
                 if lista[i][ix] == '*' or lista[i][ix] == 'X' \
                         or lista[i][ix] == 'O':
-                    print("Hay jugador o flecha bloqueando!", end = " ")
+                    if self.bot == False:
+                        print("Hay jugador o flecha bloqueando!", end = " ")
                     return False
             return True
         ### movimiento horizontal ###
@@ -45,14 +51,16 @@ class Jugador:
             for i in range(ix + 1,fx + 1):
                 if lista[iy][i] == '*' or lista[iy][i] == 'X' \
                        or lista[iy][i] == 'O':
-                    print("Hay jugador o flecha bloqueando!", end = " ")
+                    if self.bot == False:
+                        print("Hay jugador o flecha bloqueando!", end = " ")
                     return False
             return True
         elif iy == fy and ix > fx:
             for i in range(fx,ix):
                 if lista[iy][i] == '*' or lista[iy][i] == 'X' \
                         or lista[iy][i] == 'O':
-                    print("Hay jugador o flecha bloqueando!", end = " ")
+                    if self.bot == False:
+                        print("Hay jugador o flecha bloqueando!", end = " ")
                     return False
             return True
         ### movimiento diagonal ###
@@ -63,7 +71,8 @@ class Jugador:
                 for i in range(1,r):
                     if lista[ix + i][iy - i] == '*' or lista[ix + i][iy - i] == 'X' \
                             or lista[ix + i][iy - i] == 'O':
-                        print("Hay jugador o flecha bloqueando!", end = " ")
+                        if self.bot == False:
+                            print("Hay jugador o flecha bloqueando!", end = " ")
                         return False
                 return True
             ### movimiento arriba y a la izquierda
@@ -71,7 +80,8 @@ class Jugador:
                 for i in range(1,r):
                     if lista[ix - i][iy - i] == '*' or lista[ix - i][iy - i] == 'X' \
                             or lista[ix - i][iy - i] == 'O':
-                        print("Hay jugador o flecha bloqueando!", end = " ")
+                        if self.bot == False:
+                            print("Hay jugador o flecha bloqueando!", end = " ")
                         return False
                 return True
             ### movimiento abajo y a la derecha
@@ -79,7 +89,8 @@ class Jugador:
                 for i in range(1,r):
                     if lista[ix + i][iy + i] == '*' or lista[ix + i][iy + i] == 'X' \
                             or lista[ix + i][iy + i] == 'O':
-                        print("Hay jugador o flecha bloqueando!", end = " ")
+                        if self.bot == False:
+                            print("Hay jugador o flecha bloqueando!", end = " ")
                         return False
                 return True
             ### movimiento abajo y a la izquierda
@@ -87,11 +98,13 @@ class Jugador:
                 for i in range(1,r):
                     if lista[ix - i][iy + i] == '*' or lista[ix - i][iy + i] == 'X' \
                             or lista[ix - i][iy + i] == 'O':
-                        print("Hay jugador o flecha bloqueando!", end = " ")
+                        if self.bot == False:
+                            print("Hay jugador o flecha bloqueando!", end = " ")
                         return False
                 return True
-        print("Solo puede mover o lanzar verticalmente, horizontalmente", end="")
-        print(" o diagonalmente!", end=" ")
+        if self.bot == False:
+            print("Solo puede mover o lanzar verticalmente, horizontalmente", end="")
+            print(" o diagonalmente!", end=" ")
         return False
 
 
@@ -160,10 +173,12 @@ class Jugador:
             data = str(data)
             data.split()
             guardar_tablero(data)
-            print(self.nombre, "ha movido desde", inicio, "a", fin)
+            if self.bot == False:
+                print(self.nombre, "ha movido desde", inicio, "a", fin)
             return True
         else:
-            print("Movimiento invalido.")
+            if self.bot == False:
+                print("Movimiento invalido.")
             return False
 
     def lanzar(self, inicio, fin, lista):
@@ -191,11 +206,39 @@ class Jugador:
             data = str(data)
             data.split()
             guardar_tablero(data)
-            print(self.nombre, "ha lanzado desde", inicio, "a", fin)
+            if self.bot == False:
+                print(self.nombre, "ha lanzado desde", inicio, "a", fin)
             return True
         else:
-            print("Lanzamiento invalido")
+            if self.bot == False:
+                print("Lanzamiento invalido")
             return False
+
+    def botfunc(self, lista):
+        num = randint(0,3)
+        ini = self.celdas[num]
+        while self.quedan_movimientos(ini, lista) == False:
+            num = randint(0,3)
+            ini = self.celdas[num]
+        x = randint(0,10)
+        y = randint(0,10)
+        fin = chr(x + 97) + str(10 - y)
+        while self.mover(ini, fin, lista) == False:
+            x = randint(0,9)
+            y = randint(0,9)
+            fin = chr(x + 97) + str(10 - y)
+        print(self.nombre, "ha movido desde", ini, "a", fin)
+        ini = fin
+        x = randint(0,10)
+        y = randint(0,10)
+        fin = chr(x + 97) + str(10 - y)
+        while self.lanzar(ini, fin, lista) == False:
+            x = randint(0,10)
+            y = randint(0,10)
+            fin = chr(x + 97) + str(10 - y)
+        print(self.nombre, "ha lanzado desde", ini, "a", fin)
+
+
 
 ################################################################################
 ###                                                                          ###
@@ -203,9 +246,13 @@ class Jugador:
 ###                                                                          ###
 ################################################################################
 
-## TODO: player who exits is the loser
-def salir(tablero):
+def salir(tablero, quien_sale):
     print("Saliendo del juego!")
+    if quien_sale == j1:
+        ganador = j2
+    else:
+        ganador = j1
+    print(ganador.nombre, "ha ganado!")
     print(str(tablero_to_string(tablero)))
     exit()
 
@@ -281,8 +328,14 @@ print("Bienvenido a Amazonas!")
 print("En este juego, jugador 1 es 'O', jugador 2 es 'X', y las flechas son '*'")
 print("Diga nombre de Jugador 1:")
 nombre1 = input(">> ")
-print("Diga nombre de Jugador 2:")
-nombre2 = input(">> ")
+bot = input("Quiere jugar contra un bot? (s/n): ")
+if bot == 's':
+    bot_bool = True
+    nombre2 = "Bot"
+else:
+    bot_bool = False
+    print("Diga nombre de Jugador 2:")
+    nombre2 = input(">> ")
 print("Que quiere hacer?")
 print("1) Empezar nuevo tablero")
 print("2) Cargar partida guardada")
@@ -291,8 +344,8 @@ if juego == 1:
     tablero = nuevo_tablero()
 else:
     tablero = cargar_tablero()
-j1 = Jugador(tablero[0], 1, nombre1, 'O')
-j2 = Jugador(tablero[1], 2, nombre2, 'X')
+j1 = Jugador(tablero[0], 1, nombre1, 'O', False)
+j2 = Jugador(tablero[1], 2, nombre2, 'X', bot_bool)
 if tablero[-1][0] == '1':
     jugador = j1
 else:
@@ -301,27 +354,37 @@ l = hacer_lista(tablero)
 
 while(j1.perdedor(l) == False and j2.perdedor(l) == False):
     print("\n======== Turno de", jugador.nombre, "(", jugador.simb, ") ========")
+    if jugador.bot == True:
+        jugador.botfunc(l)
+        tablero = cargar_tablero()
+        l = hacer_lista(tablero)
+        print(str(tablero_to_string(tablero)))
+        if jugador == j1:
+            jugador = j2
+        else:
+            jugador = j1
+        continue
     print("En cualquier momento, puede escribir -1 para salir del juego\n")
     print(str(tablero_to_string(tablero)))
     print("\nEscoja una de sus amazonas:")
     ini = input(">> ")
     if ini == "-1":
-        salir(tablero)
+        salir(tablero, jugador)
     while ini not in jugador.celdas:
         print("Amazona invalida - escoja otra!")
         ini = input(">> ")
         if ini == "-1":
-            salir(tablero)
+            salir(tablero, jugador)
 
     ### MOVER ###
     print("Amazona valida, hacia que celda quiere mover su amazona?")
     fin = input(">> ")
     if fin == "-1":
-        salir(tablero)
+        salir(tablero, jugador)
     while jugador.mover(ini, fin, l) == False:
         fin = input("Escoja otra celda para mover: ")
         if fin == "-1":
-            salir(tablero)
+            salir(tablero, jugador)
     tablero = cargar_tablero()
     l = hacer_lista(tablero)
     print(str(tablero_to_string(tablero)))
@@ -331,11 +394,11 @@ while(j1.perdedor(l) == False and j2.perdedor(l) == False):
     print("Donde quiere lanzar una flecha?")
     fin = input(">> ")
     if fin == "-1":
-        salir(tablero)
+        salir(tablero, jugador)
     while jugador.lanzar(ini, fin, l) == False:
         fin = input("Escoja otra celda para lanzar: ")
         if fin == "-1":
-            salir(tablero)
+            salir(tablero, jugador)
     tablero = cargar_tablero()
     l = hacer_lista(tablero)
     if jugador == j1:
