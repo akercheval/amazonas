@@ -23,12 +23,15 @@ class Jugador:
             return False
         if inicio == fin:
             if self.bot == False:
-                print("La celda inicial y la celda final son iguales!", end = " ")
+                print("La celda inicial y la celda final son iguales!", end=" ")
             return False
         ix = ord(inicio[0]) - 97
         fx = ord(fin[0]) - 97
         iy = 10 - int(inicio[1:])
         fy = 10 - int(fin[1:])
+        if fx > 9 or fx < 0 or fy > 9 or fy < 0:
+            print("Celda especificada no esta en el tablero!", end=" ")
+            return False
         ### movimiento vertical ###
         if ix == fx and iy < fy:
             for i in range(iy + 1,fy + 1):
@@ -406,6 +409,7 @@ while(j1.perdedor(l) == False and j2.perdedor(l) == False):
     else:
         jugador = j1
 
+## Final del juego ##
 print(str(tablero_to_string(tablero)))
 if j1.perdedor(l):
     tablero = nuevo_tablero()
