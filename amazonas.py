@@ -1,3 +1,9 @@
+### Tarea 3 - Amazonas
+### Por Adam Kercheval
+### Este programa cumple los requisitos para el Bonus:
+###     El jugador "Bot" tiene inteligencia aleatoria sus movimientos no
+###     dependen en ninguna estrategia. Su implementación entera está en
+###     la función "botfunc"
 import os
 from random import randint
 
@@ -298,7 +304,7 @@ def hacer_lista(tablero):
 def tablero_to_string(tablero):
     lista = hacer_lista(tablero)
     tabstr = ""
-    tabstr += "\n  | a | b | c | d | e | f | g | h | i | j |\n"
+    tabstr += " Jugador 1: O -- Jugador 2: X -- Flechas : *\n"
     tabstr += horizontal()
     for i in range(10):
         tabstr += str(10 - i)
@@ -308,6 +314,7 @@ def tablero_to_string(tablero):
            tabstr += ("| " + str(lista[i][j]) + " ")
         tabstr += "|\n"
         tabstr += horizontal()
+    tabstr += "    a   b   c   d   e   f   g   h   i   j  \n"
     return tabstr
 
 def nuevo_tablero():
