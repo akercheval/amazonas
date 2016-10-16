@@ -82,7 +82,7 @@ class Jugador:
                     if lista[iy - i][ix + i] == '*' or lista[iy - i][ix + i] == 'X' \
                             or lista[iy - i][ix + i] == 'O':
                         if self.bot == False:
-                            print("Hay jugador o flecha bloqueando!", iy - i, ix + i, lista[iy - i][ix + i], end = " ")
+                            print("Hay jugador o flecha bloqueando!", end = " ")
                         return False
                 return True
             ### movimiento arriba y a la izquierda
@@ -90,8 +90,8 @@ class Jugador:
                 for i in range(1,r):
                     if lista[iy - i][ix - i] == '*' or lista[iy - i][ix - i] == 'X' \
                             or lista[iy - i][ix - i] == 'O':
-                        #if self.bot == False:
-                        print("Hay jugador o flecha bloqueando!", iy - i, ix - i, lista[iy - i][ix - i], end = " ")
+                        if self.bot == False:
+                            print("Hay jugador o flecha bloqueando!", end = " ")
                         return False
                 return True
             ### movimiento abajo y a la derecha
@@ -99,8 +99,8 @@ class Jugador:
                 for i in range(1,r):
                     if lista[iy + i][ix + i] == '*' or lista[iy + i][ix + i] == 'X' \
                             or lista[iy + i][ix + i] == 'O':
-                        #if self.bot == False:
-                        print("Hay jugador o flecha bloqueando!", iy + i, ix + i, lista[iy + i][ix + i], end = " ")
+                        if self.bot == False:
+                            print("Hay jugador o flecha bloqueando!", end = " ")
                         return False
                 return True
             ### movimiento abajo y a la izquierda
@@ -225,30 +225,36 @@ class Jugador:
             return False
 
     def botfunc(self, lista):
+        if self.perdedor(lista) == True:
+            salir(tablero, j2)
         num = randint(0,3)
         ini = self.celdas[num]
         while self.quedan_movimientos(ini, lista) == False:
             num = randint(0,3)
             ini = self.celdas[num]
+
+        ## Mover ##
+
         x = randint(0,9)
         y = randint(0,9)
         fin = chr(x + 97) + str(9 - y)
         while self.mover(ini, fin, lista) == False:
             x = randint(0,9)
             y = randint(0,9)
-            fin = chr(x + 97) + str(9 - y)
+            fin = chr(x + 97) + str(10 - y)
         print(self.nombre, "ha movido desde", ini, "a", fin)
+
+        ## Lanzar ##
+
         tablero = cargar_tablero()
         lista = hacer_lista(tablero)
+        if self.perdedor(lista) == True:
+            salir(tablero, j2)
         ini = fin
         x = randint(0,9)
         y = randint(0,9)
         fin = chr(x + 97) + str(9 - y)
         while self.lanzar(ini, fin, lista) == False:
-            print(self.lanzar('d1','c2', lista))
-            print(self.lanzar('c2','d1', lista))
-           # if fin == 'd1' or fin == 'c1':
-           #     print(ini, fin)
             x = randint(0,9)
             y = randint(0,9)
             fin = chr(x + 97) + str(10 - y)
@@ -263,7 +269,8 @@ class Jugador:
 ################################################################################
 
 def salir(tablero, quien_sale):
-    print("Saliendo del juego!")
+    if quien_sale.bot == False:
+        print("Saliendo del juego!")
     if quien_sale == j1:
         ganador = j2
     else:
