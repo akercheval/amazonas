@@ -395,7 +395,7 @@ while(j1.perdedor(l) == False and j2.perdedor(l) == False):
     if ini == "-1":
         salir(tablero, jugador)
     while ini not in jugador.celdas:
-        print("Amazona invalida - escoja otra!")
+        print("Amazona invalida - escoja otra! (forma: columna,fila - ejemplo: a8)")
         ini = input(">> ")
         if ini == "-1":
             salir(tablero, jugador)
@@ -406,7 +406,7 @@ while(j1.perdedor(l) == False and j2.perdedor(l) == False):
     if fin == "-1":
         salir(tablero, jugador)
     while jugador.mover(ini, fin, l) == False:
-        fin = input("Escoja otra celda para mover: ")
+        fin = input("Escoja otra celda para mover (forma: columna,fila - ejemplo: a8): ")
         if fin == "-1":
             salir(tablero, jugador)
     tablero = cargar_tablero()
@@ -420,7 +420,7 @@ while(j1.perdedor(l) == False and j2.perdedor(l) == False):
     if fin == "-1":
         salir(tablero, jugador)
     while jugador.lanzar(ini, fin, l) == False:
-        fin = input("Escoja otra celda para lanzar: ")
+        fin = input("Escoja otra celda para lanzar (forma: columna,fila - ejemplo: a8): ")
         if fin == "-1":
             salir(tablero, jugador)
     tablero = cargar_tablero()
